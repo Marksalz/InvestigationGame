@@ -1,4 +1,5 @@
 using InvestigationGame.Interface;
+using InvestigationGame.Factorys;
 using InvestigationGame.Sensors;
 using System;
 using System.Collections.Generic;
@@ -7,13 +8,20 @@ namespace InvestigationGame.Manager
 {
     public class InvestigationManager
     {
-        private readonly IAgent _agent;
+        private readonly IAgentFactory _agentFactory;
+        private readonly ISensorFactory _sensorFactory;
+        private IAgent _agent;
         private readonly List<ISensor> _attachedSensors;
 
-        public InvestigationManager(IAgent agent)
+        public InvestigationManager(IAgentFactory agentFactory, ISensorFactory? sensorFactory = null)
         {
-            _agent = agent;
+            _agentFactory = agentFactory;
+            _sensorFactory = sensorFactory ?? new SensorFactory();
             _attachedSensors = new List<ISensor>();
+
+            // For now, hardcode agent type and weaknesses; can be extended for user input
+            List<string> weaknesses = new List<string> { "thermal", "thermal" };
+            _agent = _agentFactory.CreateAgent("basiciranian", weaknesses);
         }
 
         public void StartInvestigation()
@@ -28,16 +36,27 @@ namespace InvestigationGame.Manager
                 Console.Write("Your choice (1/2): ");
                 var input = Console.ReadLine();
 
-                ISensor? sensor = input switch
+                string? sensorType = input switch
                 {
-                    "1" => new BasicSensor("thermal"),
-                    "2" => new BasicSensor("motion"),
+                    "1" => "thermal",
+                    "2" => "motion",
                     _ => null
                 };
 
-                if (sensor == null)
+                if (sensorType == null)
                 {
                     Console.WriteLine("Invalid choice. Try again.");
+                    continue;
+                }
+
+                ISensor sensor;
+                try
+                {
+                    sensor = _sensorFactory.CreateSensor(sensorType);
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
                     continue;
                 }
 

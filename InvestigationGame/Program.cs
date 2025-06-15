@@ -1,8 +1,10 @@
 using InvestigationGame.Interface;
+using InvestigationGame.Factorys;
 using System;
 using System.Collections.Generic;
 using InvestigationGame.Agents;
 using InvestigationGame.Manager;
+using InvestigationGame.Sensors;
 
 namespace InvestigationGame
 {
@@ -10,9 +12,9 @@ namespace InvestigationGame
     {
         static void Main()
         {
-            List<string> weaknesses = new List<string> { "thermal", "thermal" };
-            IAgent agent = new BasicIranianAgent(weaknesses);
-            InvestigationManager manager = new InvestigationManager(agent);
+            IAgentFactory agentFactory = new AgentFactory();
+            ISensorFactory sensorFactory = new SensorFactory();
+            InvestigationManager manager = new InvestigationManager(agentFactory, sensorFactory);
             manager.StartInvestigation();
         }
     }

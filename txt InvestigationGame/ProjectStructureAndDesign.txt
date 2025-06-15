@@ -1,0 +1,74 @@
+﻿InvestigationGame Project Structure and Design
+=============================================
+
+Project Target: .NET 6 Console Application
+
+Directory & File Structure
+--------------------------
+InvestigationGame/
+│
+├── Agents/
+│   └── BasicIranianAgent.cs
+│
+├── Interface/
+│   ├── IAgent.cs
+│   └── ISensor.cs
+│
+├── Manager/
+│   └── InvestigationManager.cs
+│
+├── Sensors/
+│   └── BasicSensor.cs
+│
+├── Program.cs
+├── InvestigationGame.csproj
+└── ProjectStructureAndDesign.txt (this file)
+
+Class and Interface Explanations
+--------------------------------
+
+1. Interface/IAgent.cs
+   - **IAgent**: Interface for agent entities that can be investigated.
+     - `int TotalRequiredSensors { get; }`: Number of weaknesses (sensors needed to expose the agent).
+     - `int EvaluateSensors(List<ISensor> sensors)`: Returns how many attached sensors match the agent's weaknesses.
+     - `bool IsExposed(List<ISensor> sensors)`: Returns true if all weaknesses are matched by the sensors.
+
+2. Interface/ISensor.cs
+   - **ISensor**: Interface for sensor types that can be attached to agents.
+     - `string Name { get; }`: Name/type of the sensor.
+     - `bool Matches(string weakness)`: Returns true if the sensor matches a given weakness.
+
+3. Agents/BasicIranianAgent.cs
+   - **BasicIranianAgent**: Concrete implementation of IAgent.
+     - Stores a list of secret weaknesses (e.g., "thermal", "motion").
+     - Implements logic to evaluate and expose the agent based on attached sensors.
+
+4. Sensors/BasicSensor.cs
+   - **BasicSensor**: Concrete implementation of ISensor.
+     - Represents a sensor with a specific name/type.
+     - Implements matching logic against agent weaknesses.
+
+5. Manager/InvestigationManager.cs
+   - **InvestigationManager**: Handles the investigation process.
+     - Manages the agent and the list of attached sensors.
+     - Provides a user interface to attach sensors and checks if the agent is exposed.
+
+6. Program.cs
+   - **Program**: Entry point of the application.
+     - Sets up the agent and manager, and starts the investigation.
+
+Design Overview
+---------------
+- The design follows a simple object-oriented approach with clear separation of concerns:
+  - **Interfaces** define contracts for agents and sensors.
+  - **Agents** encapsulate weaknesses and exposure logic.
+  - **Sensors** encapsulate matching logic.
+  - **Manager** orchestrates the investigation process and user interaction.
+- The system is easily extensible: new agent or sensor types can be added by implementing the respective interfaces.
+
+Flow Summary
+------------
+1. The user starts the application.
+2. The manager prompts the user to attach sensors.
+3. Each sensor is checked against the agent's weaknesses.
+4. The process repeats until all weaknesses are matched and the agent is exposed.

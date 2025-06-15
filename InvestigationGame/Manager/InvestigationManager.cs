@@ -18,7 +18,7 @@ namespace InvestigationGame.Manager
 
         public void StartInvestigation()
         {
-            Console.WriteLine("🎯 Investigation started against a low-level Iranian agent.");
+            Console.WriteLine("Investigation started against a low-level Iranian agent.");
 
             while (true)
             {
@@ -37,7 +37,7 @@ namespace InvestigationGame.Manager
 
                 if (sensor == null)
                 {
-                    Console.WriteLine("❌ Invalid choice. Try again.");
+                    Console.WriteLine("Invalid choice. Try again.");
                     continue;
                 }
 
@@ -46,11 +46,11 @@ namespace InvestigationGame.Manager
                 int match = _agent.EvaluateSensors(_attachedSensors);
                 int total = _agent.TotalRequiredSensors;
 
-                Console.WriteLine($"🧪 Match result: {match}/{total}");
+                Console.WriteLine($"Match result: {match}/{total}");
 
                 if (_agent.IsExposed(_attachedSensors))
                 {
-                    Console.WriteLine("✅ Agent exposed!");
+                    Console.WriteLine("Agent exposed!");
                     break;
                 }
             }

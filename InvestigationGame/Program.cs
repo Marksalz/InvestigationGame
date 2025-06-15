@@ -10,9 +10,9 @@ namespace InvestigationGame
     {
         static void Main()
         {
-            var weaknesses = new List<string> { "thermal", "thermal" };
+            List<string> weaknesses = new List<string> { "thermal", "thermal" };
             IAgent agent = new BasicIranianAgent(weaknesses);
-            var manager = new InvestigationManager(agent);
+            InvestigationManager manager = new InvestigationManager(agent);
             manager.StartInvestigation();
         }
     }

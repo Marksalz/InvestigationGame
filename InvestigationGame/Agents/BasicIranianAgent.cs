@@ -1,8 +1,9 @@
+using InvestigationGame.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InvestigationGame
+namespace InvestigationGame.Agents
 {
     public class BasicIranianAgent : IAgent
     {

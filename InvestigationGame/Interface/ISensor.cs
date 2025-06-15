@@ -1,4 +1,4 @@
-namespace InvestigationGame
+namespace InvestigationGame.Interface
 {
     public interface ISensor
     {

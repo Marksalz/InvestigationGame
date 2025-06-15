@@ -1,7 +1,9 @@
+using InvestigationGame.Interface;
+using InvestigationGame.Sensors;
 using System;
 using System.Collections.Generic;
 
-namespace InvestigationGame
+namespace InvestigationGame.Manager
 {
     public class InvestigationManager
     {
@@ -26,7 +28,7 @@ namespace InvestigationGame
                 Console.Write("Your choice (1/2): ");
                 var input = Console.ReadLine();
 
-                ISensor sensor = input switch
+                ISensor? sensor = input switch
                 {
                     "1" => new BasicSensor("thermal"),
                     "2" => new BasicSensor("motion"),

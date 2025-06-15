@@ -1,6 +1,7 @@
+using InvestigationGame.Interface;
 using System;
 
-namespace InvestigationGame
+namespace InvestigationGame.Sensors
 {
     public class BasicSensor : ISensor
     {

@@ -1,5 +1,8 @@
+using InvestigationGame.Interface;
 using System;
 using System.Collections.Generic;
+using InvestigationGame.Agents;
+using InvestigationGame.Manager;
 
 namespace InvestigationGame
 {

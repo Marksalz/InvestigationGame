@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace InvestigationGame
+namespace InvestigationGame.Interface
 {
     public interface IAgent
     {

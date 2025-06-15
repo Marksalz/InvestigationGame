@@ -8,20 +8,16 @@ namespace InvestigationGame.Manager
 {
     public class InvestigationManager
     {
-        private readonly IAgentFactory _agentFactory;
-        private readonly ISensorFactory _sensorFactory;
-        private IAgent _agent;
+            private readonly ISensorFactory _sensorFactory;
+        private readonly IAgent _agent;
         private readonly List<ISensor> _attachedSensors;
 
-        public InvestigationManager(IAgentFactory agentFactory, ISensorFactory? sensorFactory = null)
+        // Accept agent instance directly
+        public InvestigationManager(IAgent agent, ISensorFactory? sensorFactory = null)
         {
-            _agentFactory = agentFactory;
+            _agent = agent;
             _sensorFactory = sensorFactory ?? new SensorFactory();
             _attachedSensors = new List<ISensor>();
-
-            // For now, hardcode agent type and weaknesses; can be extended for user input
-            List<string> weaknesses = new List<string> { "thermal", "thermal" };
-            _agent = _agentFactory.CreateAgent("basiciranian", weaknesses);
         }
 
         public void StartInvestigation()
@@ -63,13 +59,15 @@ namespace InvestigationGame.Manager
                 _attachedSensors.Add(sensor);
 
                 int match = _agent.EvaluateSensors(_attachedSensors);
-                int total = _agent.TotalRequiredSensors;
+                int total = _agent.SecretWeaknesses.Count;
 
                 Console.WriteLine($"Match result: {match}/{total}");
 
                 if (_agent.IsExposed(_attachedSensors))
                 {
                     Console.WriteLine("Agent exposed!");
+                    Console.WriteLine("******************");
+                    Console.WriteLine();
                     break;
                 }
             }

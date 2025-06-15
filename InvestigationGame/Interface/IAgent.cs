@@ -4,7 +4,8 @@ namespace InvestigationGame.Interface
 {
     public interface IAgent
     {
-        int TotalRequiredSensors { get; }
+        string Name { get; set; }
+        List<string> SecretWeaknesses { get; set; }
         int EvaluateSensors(List<ISensor> sensors);
         bool IsExposed(List<ISensor> sensors);
     }

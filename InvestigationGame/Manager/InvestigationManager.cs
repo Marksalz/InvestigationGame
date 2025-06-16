@@ -11,6 +11,7 @@ namespace InvestigationGame.Manager
         private readonly ISensorFactory _sensorFactory;
         private readonly IAgent _agent;
         private readonly List<ISensor> _attachedSensors;
+        private int _turnCount = 0;
 
         public InvestigationManager(IAgent agent, ISensorFactory? sensorFactory = null)
         {
@@ -29,13 +30,15 @@ namespace InvestigationGame.Manager
                 Console.WriteLine("\nChoose a sensor to attach:");
                 Console.WriteLine("1. Thermal");
                 Console.WriteLine("2. Motion");
-                Console.Write("Your choice (1/2): ");
+                Console.WriteLine("3. Pulse");
+                Console.Write("Your choice (1/2/3): ");
                 var input = Console.ReadLine();
 
                 string? sensorType = input switch
                 {
                     "1" => "thermal",
                     "2" => "motion",
+                    "3" => "pulse",
                     _ => null
                 };
 
@@ -63,6 +66,14 @@ namespace InvestigationGame.Manager
 
                 Console.WriteLine($"Match result: {match}/{total}");
                 Console.WriteLine();
+
+                _turnCount++;
+
+                // Counterattack logic
+                if (_agent is ICounterAttackAgent counterAgent)
+                {
+                    counterAgent.CounterAttack(_attachedSensors);
+                }
 
                 if (_agent.IsExposed(_attachedSensors))
                 {

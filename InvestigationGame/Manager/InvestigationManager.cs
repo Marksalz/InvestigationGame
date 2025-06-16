@@ -67,7 +67,7 @@ namespace InvestigationGame.Manager
 
                 _turnCount++;
 
-                // Counterattack logic
+                // Counterattack logic (if supported)
                 if (_agent is ICounterAttackAgent counterAgent)
                 {
                     counterAgent.CounterAttack(_attachedSensors);
@@ -81,6 +81,12 @@ namespace InvestigationGame.Manager
                     isRunning = false;
                 }
             }
+        }
+
+        public List<ISensor> GetAttachedSensors()
+        {
+            // Expose attached sensors for result checking in Program.cs
+            return new List<ISensor>(_attachedSensors);
         }
     }
 }

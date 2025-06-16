@@ -40,7 +40,7 @@ namespace InvestigationGame
                 Enums.SensorType.Light
             };
 
-            var agents = new List<IAgent>();
+            List<IAgent> agents = new List<IAgent>();
             var random = new Random();
             for (int i = 0; i < count; i++)
             {

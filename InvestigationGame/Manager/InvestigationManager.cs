@@ -8,11 +8,10 @@ namespace InvestigationGame.Manager
 {
     public class InvestigationManager
     {
-            private readonly ISensorFactory _sensorFactory;
+        private readonly ISensorFactory _sensorFactory;
         private readonly IAgent _agent;
         private readonly List<ISensor> _attachedSensors;
 
-        // Accept agent instance directly
         public InvestigationManager(IAgent agent, ISensorFactory? sensorFactory = null)
         {
             _agent = agent;
@@ -22,9 +21,10 @@ namespace InvestigationGame.Manager
 
         public void StartInvestigation()
         {
-            Console.WriteLine("Investigation started against a low-level Iranian agent.");
+            Console.WriteLine($"Investigation started against a {_agent.Name} agent.");
 
-            while (true)
+            bool isRunning = true;
+            while (isRunning)
             {
                 Console.WriteLine("\nChoose a sensor to attach:");
                 Console.WriteLine("1. Thermal");
@@ -62,13 +62,14 @@ namespace InvestigationGame.Manager
                 int total = _agent.SecretWeaknesses.Count;
 
                 Console.WriteLine($"Match result: {match}/{total}");
+                Console.WriteLine();
 
                 if (_agent.IsExposed(_attachedSensors))
                 {
                     Console.WriteLine("Agent exposed!");
                     Console.WriteLine("******************");
                     Console.WriteLine();
-                    break;
+                    isRunning = false;
                 }
             }
         }

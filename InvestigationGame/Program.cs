@@ -12,13 +12,16 @@ namespace InvestigationGame
     {
         static void Main()
         {
+            // Initialize factories for agents and sensors
             IAgentFactory agentFactory = new AgentFactory();
             ISensorFactory sensorFactory = new SensorFactory();
+            const int NUM_AGENTS = 5;
 
             // Generate 5 agents with random weaknesses using helper function
-            var agents = GenerateRandomAgents(agentFactory, 5, new List<string> { "thermal", "motion" });
+            List<IAgent> agents = GenerateRandomAgents(agentFactory, NUM_AGENTS, new List<string> { "thermal", "motion" });
 
-            while (true)
+            bool isRunning = true;
+            while (isRunning)
             {
                 Console.WriteLine("=== Agent Investigation Menu ===");
                 for (int i = 0; i < agents.Count; i++)
@@ -32,9 +35,10 @@ namespace InvestigationGame
                 if (input == "0")
                     break;
 
+                // checks if the input is a valid integer and within the range of available agents
                 if (int.TryParse(input, out int agentIndex) && agentIndex >= 1 && agentIndex <= agents.Count)
                 {
-                    var manager = new InvestigationManager(agents[agentIndex - 1], sensorFactory);
+                    InvestigationManager manager = new InvestigationManager(agents[agentIndex - 1], sensorFactory);
                     manager.StartInvestigation();
                 }
                 else

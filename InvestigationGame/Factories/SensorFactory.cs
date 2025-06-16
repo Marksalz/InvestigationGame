@@ -1,5 +1,6 @@
 using InvestigationGame.Interface;
 using InvestigationGame.Sensors;
+using System;
 
 namespace InvestigationGame.Factorys
 {
@@ -11,6 +12,8 @@ namespace InvestigationGame.Factorys
             {
                 "thermal" => new BasicSensor("thermal"),
                 "motion" => new BasicSensor("motion"),
+                "pulse" => new PulseSensor(),
+                // Add new sensor types here
                 _ => throw new ArgumentException($"Unknown sensor type: {type}")
             };
         }

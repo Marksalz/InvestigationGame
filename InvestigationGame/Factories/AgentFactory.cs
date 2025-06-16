@@ -12,6 +12,7 @@ namespace InvestigationGame.Factorys
             return type.ToLower() switch
             {
                 "basiciranian" => new BasicIranianAgent("Basic Iranian", weaknesses),
+                "squadleader" => new SquadLeaderAgent("Squad Leader", weaknesses),
                 // Add new agent types here
                 _ => throw new ArgumentException($"Unknown agent type: {type}")
             };

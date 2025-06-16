@@ -10,10 +10,13 @@ namespace InvestigationGame.Factorys
         {
             return type.ToLower() switch
             {
-                "thermal" => new BasicSensor("thermal"),
-                "motion" => new BasicSensor("motion"),
+                "audio" => new AudioSensor(),
+                "thermal" => new ThermalSensor(),
+                "motion" => new MotionSensor(),
                 "pulse" => new PulseSensor(),
-                // Add new sensor types here
+                "magnetic" => new MagneticSensor(),
+                "signal" => new SignalSensor(),
+                "light" => new LightSensor(),
                 _ => throw new ArgumentException($"Unknown sensor type: {type}")
             };
         }

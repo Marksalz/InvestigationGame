@@ -24,7 +24,19 @@ namespace InvestigationGame
             if (player.HighestAgentRank == "Squad Leader")
                 availableAgentTypes.Add("squadleader");
 
-            List<IAgent> agents = GenerateRandomAgents(agentFactory, NUM_AGENTS, new List<string> { "thermal", "motion", "pulse" }, availableAgentTypes);
+            // Use all sensor types for weaknesses
+            var allSensorTypes = new List<Enums.SensorType>
+            {
+                Enums.SensorType.Audio,
+                Enums.SensorType.Thermal,
+                Enums.SensorType.Motion,
+                Enums.SensorType.Pulse,
+                Enums.SensorType.Magnetic,
+                Enums.SensorType.Signal,
+                Enums.SensorType.Light
+            };
+
+            List<IAgent> agents = GenerateRandomAgents(agentFactory, NUM_AGENTS, allSensorTypes, availableAgentTypes);
 
             bool isRunning = true;
             while (isRunning)
@@ -59,7 +71,7 @@ namespace InvestigationGame
             }
         }
 
-        private static List<IAgent> GenerateRandomAgents(IAgentFactory agentFactory, int count, List<string> sensorTypes, List<string> agentTypes)
+        private static List<IAgent> GenerateRandomAgents(IAgentFactory agentFactory, int count, List<Enums.SensorType> sensorTypes, List<string> agentTypes)
         {
             var agents = new List<IAgent>();
             var random = new Random();
@@ -71,7 +83,8 @@ namespace InvestigationGame
                 List<string> weaknesses = new();
                 for (int j = 0; j < weaknessCount; j++)
                 {
-                    weaknesses.Add(sensorTypes[random.Next(sensorTypes.Count)]);
+                    // Store as string for compatibility with existing agent constructors
+                    weaknesses.Add(sensorTypes[random.Next(sensorTypes.Count)].ToString().ToLower());
                 }
                 agents.Add(agentFactory.CreateAgent(agentType, weaknesses));
             }

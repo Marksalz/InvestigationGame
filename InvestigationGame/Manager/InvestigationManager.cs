@@ -28,25 +28,23 @@ namespace InvestigationGame.Manager
             while (isRunning)
             {
                 Console.WriteLine("\nChoose a sensor to attach:");
-                Console.WriteLine("1. Thermal");
-                Console.WriteLine("2. Motion");
-                Console.WriteLine("3. Pulse");
-                Console.Write("Your choice (1/2/3): ");
+                Console.WriteLine("1. Audio");
+                Console.WriteLine("2. Thermal");
+                Console.WriteLine("3. Motion");
+                Console.WriteLine("4. Pulse");
+                Console.WriteLine("5. Magnetic");
+                Console.WriteLine("6. Signal");
+                Console.WriteLine("7. Light");
+                Console.Write("Your choice (1-7): ");
                 var input = Console.ReadLine();
 
-                string? sensorType = input switch
-                {
-                    "1" => "thermal",
-                    "2" => "motion",
-                    "3" => "pulse",
-                    _ => null
-                };
-
-                if (sensorType == null)
+                if (!int.TryParse(input, out int sensorChoice) || sensorChoice < 1 || sensorChoice > 7)
                 {
                     Console.WriteLine("Invalid choice. Try again.");
                     continue;
                 }
+
+                Enums.SensorType sensorType = (Enums.SensorType)(sensorChoice - 1);
 
                 ISensor sensor;
                 try

@@ -6,17 +6,17 @@ namespace InvestigationGame.Factorys
 {
     public class SensorFactory : ISensorFactory
     {
-        public ISensor CreateSensor(string type)
+        public ISensor CreateSensor(Enums.SensorType type)
         {
-            return type.ToLower() switch
+            return type switch
             {
-                "audio" => new AudioSensor(),
-                "thermal" => new ThermalSensor(),
-                "motion" => new MotionSensor(),
-                "pulse" => new PulseSensor(),
-                "magnetic" => new MagneticSensor(),
-                "signal" => new SignalSensor(),
-                "light" => new LightSensor(),
+                Enums.SensorType.Audio => new AudioSensor(),
+                Enums.SensorType.Thermal => new ThermalSensor(),
+                Enums.SensorType.Motion => new MotionSensor(),
+                Enums.SensorType.Pulse => new PulseSensor(),
+                Enums.SensorType.Magnetic => new MagneticSensor(),
+                Enums.SensorType.Signal => new SignalSensor(),
+                Enums.SensorType.Light => new LightSensor(),
                 _ => throw new ArgumentException($"Unknown sensor type: {type}")
             };
         }

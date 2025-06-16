@@ -7,18 +7,22 @@ namespace InvestigationGame.Agents
 {
     public class BasicIranianAgent : IAgent
     {
-        private readonly List<string> _secretWeaknesses;
+        public string Name { get; set; }
 
-        public int TotalRequiredSensors => _secretWeaknesses.Count;
+        public List<string> SecretWeaknesses { get; set; } = new List<string>();
 
-        public BasicIranianAgent(List<string> weaknesses)
+        public int TotalRequiredSensors => SecretWeaknesses.Count;
+
+
+        public BasicIranianAgent(string name, List<string> weaknesses)
         {
-            _secretWeaknesses = new List<string>(weaknesses);
+            Name = name;
+            SecretWeaknesses = new List<string>(weaknesses);
         }
 
         public int EvaluateSensors(List<ISensor> sensors)
         {
-            var tempWeaknesses = new List<string>(_secretWeaknesses);
+            var tempWeaknesses = new List<string>(SecretWeaknesses);
             int matchCount = 0;
 
             foreach (var sensor in sensors)
@@ -36,7 +40,7 @@ namespace InvestigationGame.Agents
 
         public bool IsExposed(List<ISensor> sensors)
         {
-            return EvaluateSensors(sensors) == _secretWeaknesses.Count;
+            return EvaluateSensors(sensors) == SecretWeaknesses.Count;
         }
     }
 }

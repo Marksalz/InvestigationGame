@@ -18,5 +18,13 @@ namespace InvestigationGame
             Signal,
             Light
         }
+
+        public enum AgentType
+        {
+            FootSoldier,
+            SquadLeader,
+            SeniorCommander,
+            OrganizationLeader
+        }
     }
 }

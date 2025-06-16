@@ -9,11 +9,17 @@ namespace InvestigationGame.Factorys
     {
         public IAgent CreateAgent(string type, List<string> weaknesses)
         {
-            return type.ToLower() switch
+            return CreateAgent(Enum.TryParse<Enums.AgentType>(type, true, out var agentType) ? agentType : throw new ArgumentException($"Unknown agent type: {type}"), weaknesses);
+        }
+
+        public IAgent CreateAgent(Enums.AgentType type, List<string> weaknesses)
+        {
+            return type switch
             {
-                "basiciranian" => new BasicIranianAgent("Basic Iranian", weaknesses),
-                "squadleader" => new SquadLeaderAgent("Squad Leader", weaknesses),
-                // Add new agent types here
+                Enums.AgentType.FootSoldier => new FootSoldierAgent("Foot Soldier", weaknesses),
+                Enums.AgentType.SquadLeader => new SquadLeaderAgent("Squad Leader", weaknesses),
+                Enums.AgentType.SeniorCommander => new SeniorCommanderAgent("Senior Commander", weaknesses),
+                Enums.AgentType.OrganizationLeader => new OrganizationLeaderAgent("Organization Leader", weaknesses),
                 _ => throw new ArgumentException($"Unknown agent type: {type}")
             };
         }

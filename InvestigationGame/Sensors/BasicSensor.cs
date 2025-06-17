@@ -12,9 +12,9 @@ namespace InvestigationGame.Sensors
             Name = name;
         }
 
-        public bool Matches(string weakness)
+        public bool Matches(InvestigationGame.Enums.SensorType weakness)
         {
-            return Name.Equals(weakness, StringComparison.OrdinalIgnoreCase);
+            return Name.Equals(weakness.ToString(), StringComparison.OrdinalIgnoreCase);
         }
     }
 }

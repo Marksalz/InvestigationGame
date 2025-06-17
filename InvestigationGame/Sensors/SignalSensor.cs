@@ -9,9 +9,9 @@ namespace InvestigationGame.Sensors
         public string Name { get; } = "signal";
         private bool _revealed = false;
 
-        public bool Matches(string weakness)
+        public bool Matches(InvestigationGame.Enums.SensorType weakness)
         {
-            return Name.Equals(weakness, StringComparison.OrdinalIgnoreCase);
+            return weakness == InvestigationGame.Enums.SensorType.Signal;
         }
 
         // Reveals one field of information about the agent (e.g., rank)

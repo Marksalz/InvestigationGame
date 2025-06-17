@@ -2,7 +2,7 @@ using InvestigationGame.Interface;
 using InvestigationGame.Sensors;
 using System;
 
-namespace InvestigationGame.Factorys
+namespace InvestigationGame.Factories
 {
     public class SensorFactory : ISensorFactory
     {

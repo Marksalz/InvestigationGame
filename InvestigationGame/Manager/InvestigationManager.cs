@@ -1,4 +1,4 @@
-using InvestigationGame.Factorys;
+using InvestigationGame.Factories;
 using InvestigationGame.Interface;
 using InvestigationGame.Sensors;
 using System;
@@ -102,6 +102,15 @@ namespace InvestigationGame.Manager
             switch (sensor)
             {
                 case ThermalSensor thermalSensor:
+                    //// Convert string weaknesses to SensorType enum list
+                    //var weaknessTypes = new List<Enums.SensorType>();
+                    //foreach (var w in _agent.SecretWeaknesses)
+                    //{
+                    //    if (Enum.TryParse<Enums.SensorType>(w, true, out var type))
+                    //    {
+                    //        weaknessTypes.Add(type);
+                    //    }
+                    //}
                     var revealedWeakness = thermalSensor.RevealWeakness(_agent.SecretWeaknesses);
                     if (revealedWeakness != null)
                     {

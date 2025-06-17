@@ -10,11 +10,11 @@ namespace InvestigationGame.Sensors
         private const int MaxActivations = 3;
         public bool IsBroken => _activations >= MaxActivations;
 
-        public bool Matches(string weakness)
+        public bool Matches(InvestigationGame.Enums.SensorType weakness)
         {
             if (IsBroken) return false;
             _activations++;
-            return Name.Equals(weakness, StringComparison.OrdinalIgnoreCase);
+            return weakness == InvestigationGame.Enums.SensorType.Pulse;
         }
     }
 }

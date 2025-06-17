@@ -36,7 +36,7 @@ namespace InvestigationGame.Agents
 
         public bool IsExposed(List<ISensor> sensors)
         {
-            return EvaluateSensors(sensors) == SecretWeaknesses.Count;
+            return EvaluateSensors(sensors) == SensorSlots;
         }
 
         // add the toString method to provide a string representation of the agent
@@ -45,16 +45,18 @@ namespace InvestigationGame.Agents
             return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
 
-        public void CounterAttack(List<ISensor> attachedSensors)
+        public List<ISensor> CounterAttack(List<ISensor> attachedSensors)
         {
             CounterAttackTurn++;
             if (CounterAttackTurn % 3 == 0 && attachedSensors.Count > 0)
             {
                 var rand = new Random();
                 int idx = rand.Next(attachedSensors.Count);
+                string removedSensorName = attachedSensors[idx].Name;
                 attachedSensors.RemoveAt(idx);
-                Console.WriteLine("Counterattack! A sensor was removed by the Squad Leader.");
+                Console.WriteLine($"Counterattack! The Sensor {removedSensorName} was removed by the Squad Leader.");
             }
+            return attachedSensors;
         }
     }
 }

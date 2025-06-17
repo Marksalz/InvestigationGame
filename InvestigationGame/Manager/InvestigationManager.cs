@@ -1,8 +1,9 @@
-using InvestigationGame.Interface;
 using InvestigationGame.Factorys;
+using InvestigationGame.Interface;
 using InvestigationGame.Sensors;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace InvestigationGame.Manager
 {
@@ -10,12 +11,12 @@ namespace InvestigationGame.Manager
     {
         private readonly ISensorFactory _sensorFactory;
         private readonly IAgent _agent;
-        private readonly List<ISensor> _attachedSensors;
+        private List<ISensor> _attachedSensors;
         private int _turnCount = 0;
 
         public InvestigationManager(IAgent agent, ISensorFactory? sensorFactory = null)
         {
-            _agent = agent;
+            _agent = agent ?? throw new ArgumentNullException(nameof(agent));
             _sensorFactory = sensorFactory ?? new SensorFactory();
             _attachedSensors = new List<ISensor>();
         }
@@ -23,6 +24,8 @@ namespace InvestigationGame.Manager
         public void StartInvestigation()
         {
             Console.WriteLine($"Investigation started against a {_agent.Name} agent.");
+
+            
 
             bool isRunning = true;
             while (isRunning)
@@ -58,20 +61,20 @@ namespace InvestigationGame.Manager
                 }
 
                 _attachedSensors.Add(sensor);
+                ActivateRevel(sensor);
+
+                if (_agent is ICounterAttackAgent counterAgent)
+                {
+                    _attachedSensors = counterAgent.CounterAttack(_attachedSensors);
+                }
 
                 int match = _agent.EvaluateSensors(_attachedSensors);
-                int total = _agent.SecretWeaknesses.Count;
+                int total = _agent.SensorSlots;
 
                 Console.WriteLine($"Match result: {match}/{total}");
                 Console.WriteLine();
 
                 _turnCount++;
-
-                // Counterattack logic (if supported)
-                if (_agent is ICounterAttackAgent counterAgent)
-                {
-                    counterAgent.CounterAttack(_attachedSensors);
-                }
 
                 if (_agent.IsExposed(_attachedSensors))
                 {
@@ -80,6 +83,65 @@ namespace InvestigationGame.Manager
                     Console.WriteLine();
                     isRunning = false;
                 }
+            }
+        }
+
+
+
+        public void ActivateRevel(ISensor sensor)
+        {
+            // Prepare agent info for reveal abilities
+            var agentInfo = new Dictionary<string, string>
+            {
+                { "Name", _agent.Name },
+                { "Weaknesses", string.Join(", ", _agent.SecretWeaknesses) },
+                { "SensorSlots", _agent.SensorSlots.ToString() }
+            };
+
+            // Handle special reveal abilities
+            switch (sensor)
+            {
+                case ThermalSensor thermalSensor:
+                    var revealedWeakness = thermalSensor.RevealWeakness(_agent.SecretWeaknesses);
+                    if (revealedWeakness != null)
+                    {
+                        Console.WriteLine($"[ThermalSensor] Revealed a weakness: {revealedWeakness}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("[ThermalSensor] No weaknesses revealed.");
+                    }
+                    break;
+                case SignalSensor signalSensor:
+                    var revealedInfo = signalSensor.RevealInfo(agentInfo);
+                    if (revealedInfo != null)
+                    {
+                        Console.WriteLine($"[SignalSensor] Revealed info: {revealedInfo}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("[SignalSensor] No info revealed.");
+                    }
+                    break;
+                case LightSensor lightSensor:
+                    var revealedFields = lightSensor.RevealInfo(agentInfo);
+                    if (revealedFields != null && revealedFields.Count > 0)
+                    {
+                        Console.WriteLine("[LightSensor] Revealed info:");
+                        foreach (var field in revealedFields)
+                        {
+                            Console.WriteLine($"  {field}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("[LightSensor] No info revealed.");
+                    }
+                    break;
+                default:
+                    // For other sensors, no special reveal logic is defined
+                    Console.WriteLine($"[{sensor.Name}] No special reveal ability defined.");
+                    break;
             }
         }
 

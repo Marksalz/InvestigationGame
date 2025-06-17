@@ -8,7 +8,7 @@ namespace InvestigationGame.Agents
     {
         public string Name { get; set; }
         public List<string> SecretWeaknesses { get; set; } = new();
-        public int SensorSlots => 2;
+        public int SensorSlots { get; set; } = 2;
 
         public FootSoldierAgent(string name, List<string> weaknesses)
         {
@@ -35,6 +35,11 @@ namespace InvestigationGame.Agents
         public bool IsExposed(List<ISensor> sensors)
         {
             return EvaluateSensors(sensors) == SecretWeaknesses.Count;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
     }
 }

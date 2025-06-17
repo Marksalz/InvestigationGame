@@ -10,7 +10,7 @@ namespace InvestigationGame.Agents
         public string Name { get; set; }
         public List<string> SecretWeaknesses { get; set; } = new();
         public int CounterAttackTurn { get; private set; } = 0;
-        public int SensorSlots => 8;
+        public int SensorSlots { get; set; } = 8;
         private readonly List<string> _originalWeaknesses;
 
         public OrganizationLeaderAgent(string name, List<string> weaknesses)
@@ -39,6 +39,11 @@ namespace InvestigationGame.Agents
         public bool IsExposed(List<ISensor> sensors)
         {
             return EvaluateSensors(sensors) == SecretWeaknesses.Count;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
 
         public void CounterAttack(List<ISensor> attachedSensors)

@@ -10,7 +10,7 @@ namespace InvestigationGame.Agents
         public string Name { get; set; }
         public List<string> SecretWeaknesses { get; set; } = new();
         public int CounterAttackTurn { get; private set; } = 0;
-        public int SensorSlots => 4;
+        public int SensorSlots { get; set; } = 4;
 
         public SquadLeaderAgent(string name, List<string> weaknesses)
         {
@@ -37,6 +37,12 @@ namespace InvestigationGame.Agents
         public bool IsExposed(List<ISensor> sensors)
         {
             return EvaluateSensors(sensors) == SecretWeaknesses.Count;
+        }
+
+        // add the toString method to provide a string representation of the agent
+        public override string ToString()
+        {
+            return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
 
         public void CounterAttack(List<ISensor> attachedSensors)

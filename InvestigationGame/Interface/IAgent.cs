@@ -6,7 +6,9 @@ namespace InvestigationGame.Interface
     {
         string Name { get; set; }
         List<string> SecretWeaknesses { get; set; }
+        int SensorSlots { get; set; }
         int EvaluateSensors(List<ISensor> sensors);
         bool IsExposed(List<ISensor> sensors);
+        string ToString();
     }
 }

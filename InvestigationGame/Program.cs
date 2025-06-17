@@ -12,10 +12,21 @@ namespace InvestigationGame
             var player = new PlayerProfile { Name = "Player1" };
             var agentFactory = new AgentFactory();
             var sensorFactory = new SensorFactory();
-            const int NUM_AGENTS = 5;
+            const int NUM_AGENTS = 4;
 
-            var agents = GenerateAgents(agentFactory, player, NUM_AGENTS);
+            List<IAgent> agents = GenerateAgents(agentFactory, player, NUM_AGENTS);
+            printGenaratedAgents(agents);
             RunInvestigationLoop(agents, sensorFactory, player);
+        }
+
+        public static void printGenaratedAgents(List<IAgent> agents)
+        {
+            Console.WriteLine("=== Agents Generated ===");
+            foreach (var agent in agents)
+            {
+                Console.WriteLine(agent.ToString()); 
+            }
+            Console.WriteLine();
         }
 
         private static List<IAgent> GenerateAgents(IAgentFactory agentFactory, PlayerProfile player, int count)

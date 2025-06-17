@@ -3,16 +3,16 @@ using InvestigationGame.Interface;
 using System;
 using System.Collections.Generic;
 
-namespace InvestigationGame.Factorys
+namespace InvestigationGame.Factories
 {
     public class AgentFactory : IAgentFactory
     {
-        public IAgent CreateAgent(string type, List<string> weaknesses)
-        {
-            return CreateAgent(Enum.TryParse<Enums.AgentType>(type, true, out var agentType) ? agentType : throw new ArgumentException($"Unknown agent type: {type}"), weaknesses);
-        }
+        //public IAgent CreateAgent(string type, List<string> weaknesses)
+        //{
+        //    return CreateAgent(Enum.TryParse<Enums.AgentType>(type, true, out var agentType) ? agentType : throw new ArgumentException($"Unknown agent type: {type}"), weaknesses);
+        //}
 
-        public IAgent CreateAgent(Enums.AgentType type, List<string> weaknesses)
+        public IAgent CreateAgent(Enums.AgentType type, List<Enums.SensorType> weaknesses)
         {
             return type switch
             {

@@ -1,7 +1,8 @@
 using InvestigationGame.Interface;
-using InvestigationGame.Factorys;
+using InvestigationGame.Factories;
 using InvestigationGame.Manager;
 using InvestigationGame.Player;
+
 
 namespace InvestigationGame
 {
@@ -64,10 +65,10 @@ namespace InvestigationGame
                     Enums.AgentType.OrganizationLeader => 8,
                     _ => 2
                 };
-                var weaknesses = new List<string>();
+                var weaknesses = new List<Enums.SensorType>();
                 for (int j = 0; j < weaknessCount; j++)
                 {
-                    weaknesses.Add(allSensorTypes[random.Next(allSensorTypes.Count)].ToString().ToLower());
+                    weaknesses.Add(allSensorTypes[random.Next(allSensorTypes.Count)]);
                 }
                 agents.Add(agentFactory.CreateAgent(agentType, weaknesses));
             }

@@ -9,13 +9,13 @@ namespace InvestigationGame.Sensors
         private int _counterCancelUses = 0;
         private const int MaxCancels = 2;
 
-        public bool Matches(string weakness)
+        public bool Matches(Enums.SensorType weakness)
         {
-            return Name.Equals(weakness, StringComparison.OrdinalIgnoreCase);
+            return weakness == Enums.SensorType.Magnetic;
         }
 
         // Call this when a counterattack would occur
-        public bool TryCancelCounterAttack(string weakness)
+        public bool TryCancelCounterAttack(Enums.SensorType weakness)
         {
             if (_counterCancelUses < MaxCancels && Matches(weakness))
             {

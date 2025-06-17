@@ -7,23 +7,23 @@ namespace InvestigationGame.Agents
     public class FootSoldierAgent : IAgent
     {
         public string Name { get; set; }
-        public List<string> SecretWeaknesses { get; set; } = new();
+        public List<Enums.SensorType> SecretWeaknesses { get; set; } = new();
         public int SensorSlots { get; set; } = 2;
 
-        public FootSoldierAgent(string name, List<string> weaknesses)
+        public FootSoldierAgent(string name, List<Enums.SensorType> weaknesses)
         {
             Name = name;
-            SecretWeaknesses = new List<string>(weaknesses);
+            SecretWeaknesses = new List<Enums.SensorType>(weaknesses);
         }
 
         public int EvaluateSensors(List<ISensor> sensors)
         {
-            var tempWeaknesses = new List<string>(SecretWeaknesses);
+            var tempWeaknesses = new List<Enums.SensorType>(SecretWeaknesses);
             int matchCount = 0;
             foreach (var sensor in sensors)
             {
                 var match = tempWeaknesses.FirstOrDefault(w => sensor.Matches(w));
-                if (match != null)
+                if (match != 0)
                 {
                     matchCount++;
                     tempWeaknesses.Remove(match);

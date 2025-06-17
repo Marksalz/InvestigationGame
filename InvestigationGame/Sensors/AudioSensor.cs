@@ -7,9 +7,9 @@ namespace InvestigationGame.Sensors
     {
         public string Name { get; } = "audio";
 
-        public bool Matches(string weakness)
+        public bool Matches(InvestigationGame.Enums.SensorType weakness)
         {
-            return Name.Equals(weakness, StringComparison.OrdinalIgnoreCase);
+            return weakness == InvestigationGame.Enums.SensorType.Audio;
         }
     }
 }

@@ -9,23 +9,22 @@ namespace InvestigationGame.Sensors
         public string Name { get; } = "thermal";
         private bool _revealed = false;
 
-        public bool Matches(string weakness)
+        public bool Matches(InvestigationGame.Enums.SensorType weakness)
         {
-            return Name.Equals(weakness, StringComparison.OrdinalIgnoreCase);
+            return weakness == InvestigationGame.Enums.SensorType.Thermal;
         }
 
         // Special ability: reveals one correct sensor type from the secret list
-        public string? RevealWeakness(List<string> secretWeaknesses)
+        public string? RevealWeakness(List<InvestigationGame.Enums.SensorType> secretWeaknesses)
         {
             if (_revealed || secretWeaknesses == null || secretWeaknesses.Count == 0)
                 return null;
 
             _revealed = true;
-            // Reveal the first matching weakness for simplicity
             foreach (var weakness in secretWeaknesses)
             {
-                if (Name.Equals(weakness, StringComparison.OrdinalIgnoreCase))
-                    return weakness;
+                if (weakness == InvestigationGame.Enums.SensorType.Thermal)
+                    return weakness.ToString();
             }
             return null;
         }

@@ -4,6 +4,6 @@ namespace InvestigationGame.Interface
 {
     public interface ICounterAttackAgent
     {
-        void CounterAttack(List<ISensor> attachedSensors);
+        List<ISensor> CounterAttack(List<ISensor> attachedSensors);
     }
 }

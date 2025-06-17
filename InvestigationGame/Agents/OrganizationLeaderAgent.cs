@@ -46,20 +46,26 @@ namespace InvestigationGame.Agents
             return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
 
-        public void CounterAttack(List<ISensor> attachedSensors)
+        public List<ISensor> CounterAttack(List<ISensor> attachedSensors)
         {
             CounterAttackTurn++;
             if (CounterAttackTurn % 3 == 0 && attachedSensors.Count > 0)
             {
-                attachedSensors.Clear();
-                Console.WriteLine("Counterattack! All sensors were removed by the Organization Leader.");
+                var rand = new Random();
+                int idx = rand.Next(attachedSensors.Count);
+                string removedSensorName = attachedSensors[idx].Name;
+                attachedSensors.RemoveAt(idx);
+                Console.WriteLine($"Counterattack! The Sensor {removedSensorName} was removed by the Squad Leader.");
+                return attachedSensors;
             }
             if (CounterAttackTurn % 10 == 0)
             {
                 SecretWeaknesses = new List<string>(_originalWeaknesses);
                 attachedSensors.Clear();
                 Console.WriteLine("Major counterattack! Weaknesses reset and all sensors removed.");
+                return attachedSensors;
             }
+            return attachedSensors;
         }
     }
 }

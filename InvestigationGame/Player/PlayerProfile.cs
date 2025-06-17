@@ -9,7 +9,6 @@ namespace InvestigationGame.Player
 
         public void UpdateRank(string newRank)
         {
-            // Implement rank comparison logic as needed
             HighestAgentRank = newRank;
         }
     }

@@ -1,18 +1,17 @@
 using InvestigationGame.Factories;
 using InvestigationGame.Interface;
 using InvestigationGame.Sensors;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace InvestigationGame.Manager
 {
+    /// <summary>
+    /// A class that manages the investigation process against an agent using various sensors.
+    /// </summary>
     public class InvestigationManager
     {
         private readonly ISensorFactory _sensorFactory;
         private readonly IAgent _agent;
         private List<ISensor> _attachedSensors;
-        private int _turnCount = 0;
 
         public InvestigationManager(IAgent agent, ISensorFactory? sensorFactory = null)
         {
@@ -21,13 +20,15 @@ namespace InvestigationGame.Manager
             _attachedSensors = new List<ISensor>();
         }
 
+        /// <summary>
+        /// A method to start the investigation against the agent.
+        /// </summary>
         public void StartInvestigation()
         {
             Console.WriteLine($"Investigation started against a {_agent.Name} agent.");
 
-            
-
             bool isRunning = true;
+            // This loop allows the player to attach sensors until they are exposed or choose to stop.
             while (isRunning)
             {
                 Console.WriteLine("\nChoose a sensor to attach:");
@@ -41,6 +42,7 @@ namespace InvestigationGame.Manager
                 Console.Write("Your choice (1-7): ");
                 var input = Console.ReadLine();
 
+                // Validate input
                 if (!int.TryParse(input, out int sensorChoice) || sensorChoice < 1 || sensorChoice > 7)
                 {
                     Console.WriteLine("Invalid choice. Try again.");
@@ -71,6 +73,7 @@ namespace InvestigationGame.Manager
                 _attachedSensors.Add(sensor);
                 ActivateRevel(sensor);
 
+                // check if the agent is a agent that can counter-attack.
                 if (_agent is ICounterAttackAgent counterAgent)
                 {
                     _attachedSensors = counterAgent.CounterAttack(_attachedSensors);
@@ -78,25 +81,7 @@ namespace InvestigationGame.Manager
 
                 int match = _agent.EvaluateSensors(_attachedSensors);
                 int total = _agent.SensorSlots;
-
-                //// Check for broken sensors and remove them
-                //var brokenSensors = new List<ISensor>();
-                //foreach (var sensor1 in _attachedSensors)
-                //{
-                //    // Only check for sensors that can break
-                //    if ((sensor1 is MotionSensor motion && motion.IsBroken) ||
-                //        (sensor1 is PulseSensor pulse && pulse.IsBroken))
-                //    {
-                //        Console.WriteLine($"The {sensor1.Name} sensor is broken and has been removed.");
-                //        brokenSensors.Add(sensor1);
-                //    }
-                //}
-                //foreach (var broken in brokenSensors)
-                //{
-                //    _attachedSensors.Remove(broken);
-                //}
-
-                // Display the current state of attached sensors
+              
                 Console.WriteLine("\nCurrent attached sensors:");
                 foreach (var attachedSensor in _attachedSensors)
                 {
@@ -105,8 +90,7 @@ namespace InvestigationGame.Manager
                 Console.WriteLine($"Match result: {match}/{total}");
                 Console.WriteLine();
 
-                _turnCount++;
-
+                // check if the agent is exposed, and if so, end the investigation
                 if (_agent.IsExposed(_attachedSensors))
                 {
                     Console.WriteLine("Agent exposed!");
@@ -126,12 +110,21 @@ namespace InvestigationGame.Manager
             }
         }
 
+        /// <summary>
+        /// Checks if a sensor is broken by activating it and checking its state.
+        /// </summary>
+        /// <param name="sensor"></param>
+        /// <returns></returns>
         public bool checkSensorBroken(ISensorBroken sensor)
         {
            sensor.Activate();
            return sensor.IsBroken;
         }
 
+        /// <summary>
+        /// Checks the sensor type and activates the reveal ability of the sensor.
+        /// </summary>
+        /// <param name="sensor"></param>
         public void ActivateRevel(ISensor sensor)
         {
             var agentInfo = new Dictionary<string, string>
@@ -141,6 +134,7 @@ namespace InvestigationGame.Manager
                 { "SensorSlots", _agent.SensorSlots.ToString() }
             };
 
+            // A switch statement to handle different sensor types and their specific reveal abilities
             switch (sensor)
             {
                 case ThermalSensor thermalSensor:               
@@ -187,6 +181,10 @@ namespace InvestigationGame.Manager
             }
         }
 
+        /// <summary>
+        /// A method to get the list of attached sensors for result checking.
+        /// </summary>
+        /// <returns></returns>
         public List<ISensor> GetAttachedSensors()
         {
             // Expose attached sensors for result checking in Program.cs

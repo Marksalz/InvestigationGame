@@ -3,14 +3,25 @@ using InvestigationGame.Factories;
 using InvestigationGame.Manager;
 using InvestigationGame.Player;
 
-
 namespace InvestigationGame
 {
+    /// <summary>
+    /// Main entry point for the Investigation Game application.
+    /// </summary>
     class Program
     {
         static void Main()
         {
-            var player = new PlayerProfile { Name = "Player1" };
+            // Ask the player for their name
+            Console.Write("Enter your name: ");
+            string? playerName = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(playerName))
+            {
+                playerName = "Player1";
+            }
+
+            // Initialize player profile and factories
+            var player = new PlayerProfile { Name = playerName };
             var agentFactory = new AgentFactory();
             var sensorFactory = new SensorFactory();
             const int NUM_AGENTS = 4;
@@ -20,20 +31,17 @@ namespace InvestigationGame
             RunInvestigationLoop(agents, sensorFactory, player);
         }
 
-        public static void printGenaratedAgents(List<IAgent> agents)
-        {
-            Console.WriteLine("=== Agents Generated ===");
-            foreach (var agent in agents)
-            {
-                Console.WriteLine(agent.ToString()); 
-            }
-            Console.WriteLine();
-        }
-
+        /// <summary>
+        /// A method to generate a list of agents based on the player's profile and the specified count.
+        /// </summary>
+        /// <param name="agentFactory"></param>
+        /// <param name="player"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         private static List<IAgent> GenerateAgents(IAgentFactory agentFactory, PlayerProfile player, int count)
         {
             // Only allow higher agent types if player has reached the required rank
-            var enumAgentTypes = new List<Enums.AgentType>
+            List<Enums.AgentType> enumAgentTypes = new List<Enums.AgentType>
             {
                 Enums.AgentType.FootSoldier,
                 Enums.AgentType.SquadLeader,
@@ -41,7 +49,7 @@ namespace InvestigationGame
                 Enums.AgentType.OrganizationLeader
             };
 
-            var allSensorTypes = new List<Enums.SensorType>
+            List<Enums.SensorType> allSensorTypes = new List<Enums.SensorType>
             {
                 Enums.SensorType.Audio,
                 Enums.SensorType.Thermal,
@@ -75,6 +83,26 @@ namespace InvestigationGame
             return agents;
         }
 
+        /// <summary>
+        /// A method to print the generated agents to the console.
+        /// </summary>
+        /// <param name="agents"></param>
+        public static void printGenaratedAgents(List<IAgent> agents)
+        {
+            Console.WriteLine("=== Agents Generated ===");
+            foreach (var agent in agents)
+            {
+                Console.WriteLine(agent.ToString());
+            }
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// A method to run the investigation loop, allowing the player to investigate agents in order.
+        /// </summary>
+        /// <param name="agents"></param>
+        /// <param name="sensorFactory"></param>
+        /// <param name="player"></param>
         private static void RunInvestigationLoop(List<IAgent> agents, ISensorFactory sensorFactory, PlayerProfile player)
         {
             int currentAgentIndex = 0;
@@ -100,6 +128,11 @@ namespace InvestigationGame
             }
         }
 
+        /// <summary>
+        /// This method displays the agent investigation menu, showing the status of each agent.
+        /// </summary>
+        /// <param name="agents"></param>
+        /// <param name="currentAgentIndex"></param>
         private static void DisplayAgentMenu(List<IAgent> agents, int currentAgentIndex)
         {
             Console.WriteLine("=== Agent Investigation Menu ===");
@@ -110,6 +143,14 @@ namespace InvestigationGame
             }
         }
 
+        /// <summary>
+        /// This method handles the investigation of a specific agent, 
+        /// allowing the player to attach sensors and check if the agent is exposed 
+        /// and update the player's rank accordingly.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="sensorFactory"></param>
+        /// <param name="player"></param>
         private static void InvestigateAgent(IAgent agent, ISensorFactory sensorFactory, PlayerProfile player)
         {
             var manager = new InvestigationManager(agent, sensorFactory);

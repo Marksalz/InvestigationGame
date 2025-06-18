@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace InvestigationGame.Agents
 {
+    /// <summary>
+    /// A class representing a Squad Leader agent in the Investigation Game.
+    /// </summary>
     public class SeniorCommanderAgent : IAgent, ICounterAttackAgent
     {
         public string Name { get; set; }
@@ -20,6 +23,11 @@ namespace InvestigationGame.Agents
             _originalWeaknesses = new List<Enums.SensorType>(weaknesses);
         }
 
+        /// <summary>
+        /// A method to evaluate the sensors attached to this agent.
+        /// </summary>
+        /// <param name="sensors"></param>
+        /// <returns></returns>
         public int EvaluateSensors(List<ISensor> sensors)
         {
             var tempWeaknesses = new List<Enums.SensorType>(SecretWeaknesses);
@@ -36,16 +44,30 @@ namespace InvestigationGame.Agents
             return matchCount;
         }
 
+        /// <summary>
+        /// A method to check if the agent is exposed based on the attached sensors.
+        /// </summary>
+        /// <param name="sensors"></param>
+        /// <returns></returns>
         public bool IsExposed(List<ISensor> sensors)
         {
             return EvaluateSensors(sensors) == SecretWeaknesses.Count;
         }
 
+        /// <summary>
+        /// A method to return a string representation of the agent.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
 
+        /// <summary>
+        /// A method to perform a counterattack against attached sensors.
+        /// </summary>
+        /// <param name="attachedSensors"></param>
+        /// <returns></returns>
         public List<ISensor> CounterAttack(List<ISensor> attachedSensors)
         {
             CounterAttackTurn++;
@@ -57,8 +79,23 @@ namespace InvestigationGame.Agents
                 Console.WriteLine("Major counterattack! Weaknesses reset and all sensors removed.");
                 return attachedSensors;
             }
+
+            // Minor counterattack every 3 turns
             if (CounterAttackTurn % 3 == 0 && attachedSensors.Count > 0)
             {
+                // Check for MagneticSensor cancel
+                foreach (var sensor in attachedSensors)
+                {
+                    if (sensor is Sensors.MagneticSensor magneticSensor)
+                    {
+                        if (magneticSensor.TryCancelCounterAttack(Enums.SensorType.Magnetic))
+                        {
+                            Console.WriteLine("Counterattack was canceled by a Magnetic Sensor!");
+                            return attachedSensors;
+                        }
+                    }
+                }
+
                 var rand = new Random();
                 int removeCount = Math.Min(2, attachedSensors.Count);
                 List<string> removedSensors = new List<string>();

@@ -5,17 +5,29 @@ using System.Linq;
 
 namespace InvestigationGame.Sensors
 {
+    /// <summary>
+    /// A class representing a light sensor in the Investigation Game.
+    /// </summary>
     public class LightSensor : ISensor
     {
         public string Name { get; } = "light";
         private bool _revealed = false;
 
-        public bool Matches(InvestigationGame.Enums.SensorType weakness)
+        /// <summary>
+        /// A method to check if the sensor matches a specific weakness type.
+        /// </summary>
+        /// <param name="weakness"></param>
+        /// <returns></returns>
+        public bool Matches(Enums.SensorType weakness)
         {
-            return weakness == InvestigationGame.Enums.SensorType.Light;
+            return weakness == Enums.SensorType.Light;
         }
 
-        // Reveals two fields of information about the agent (e.g., affiliation)
+        /// <summary>
+        /// A method to reveal information about agents based on the provided agent info.
+        /// </summary>
+        /// <param name="agentInfo"></param>
+        /// <returns></returns>
         public List<string>? RevealInfo(Dictionary<string, string> agentInfo)
         {
             if (_revealed || agentInfo == null || agentInfo.Count == 0)

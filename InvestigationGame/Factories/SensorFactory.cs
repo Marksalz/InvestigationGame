@@ -6,8 +6,15 @@ namespace InvestigationGame.Factories
 {
     public class SensorFactory : ISensorFactory
     {
+        /// <summary>
+        /// This factory method creates a sensor based on the specified type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public ISensor CreateSensor(Enums.SensorType type)
         {
+            // This method uses a switch expression to determine which sensor to create based on the provided type.
             return type switch
             {
                 Enums.SensorType.Audio => new AudioSensor(),

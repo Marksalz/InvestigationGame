@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace InvestigationGame.Agents
 {
+    /// <summary>
+    /// A class representing a Squad Leader agent in the Investigation Game.
+    /// </summary>
     public class SquadLeaderAgent : IAgent, ICounterAttackAgent
     {
         public string Name { get; set; }
@@ -18,6 +21,11 @@ namespace InvestigationGame.Agents
             SecretWeaknesses = new List<Enums.SensorType>(weaknesses);
         }
 
+        /// <summary>
+        /// A method to evaluate the sensors against the agent's weaknesses.
+        /// </summary>
+        /// <param name="sensors"></param>
+        /// <returns></returns>
         public int EvaluateSensors(List<ISensor> sensors)
         {
             var tempWeaknesses = new List<Enums.SensorType>(SecretWeaknesses);
@@ -34,22 +42,44 @@ namespace InvestigationGame.Agents
             return matchCount;
         }
 
+        /// <summary>
+        /// A method to check if the agent is exposed based on the sensors attached.
+        /// </summary>
+        /// <param name="sensors"></param>
+        /// <returns></returns>
         public bool IsExposed(List<ISensor> sensors)
         {
             return EvaluateSensors(sensors) == SensorSlots;
         }
 
-        // add the toString method to provide a string representation of the agent
         public override string ToString()
         {
             return $"{Name} - Weaknesses: {string.Join(", ", SecretWeaknesses)}";
         }
 
+        /// <summary>
+        /// A method to perform a counterattack against attached sensors.
+        /// </summary>
+        /// <param name="attachedSensors"></param>
+        /// <returns></returns>
         public List<ISensor> CounterAttack(List<ISensor> attachedSensors)
         {
             CounterAttackTurn++;
             if (CounterAttackTurn % 3 == 0 && attachedSensors.Count > 0)
             {
+                // Check for MagneticSensor cancel
+                foreach (var sensor in attachedSensors)
+                {
+                    if (sensor is Sensors.MagneticSensor magneticSensor)
+                    {
+                        if (magneticSensor.TryCancelCounterAttack(Enums.SensorType.Magnetic))
+                        {
+                            Console.WriteLine("Counterattack was canceled by a Magnetic Sensor!");
+                            return attachedSensors;
+                        }
+                    }
+                }
+
                 var rand = new Random();
                 int idx = rand.Next(attachedSensors.Count);
                 string removedSensorName = attachedSensors[idx].Name;

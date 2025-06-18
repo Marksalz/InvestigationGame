@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace InvestigationGame.Interface
 {
+    /// <summary>
+    /// An interface for agents.
+    /// </summary>
     public interface IAgent
     {
         string Name { get; set; }

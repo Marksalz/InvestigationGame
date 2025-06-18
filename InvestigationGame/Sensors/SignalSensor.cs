@@ -4,17 +4,29 @@ using System.Collections.Generic;
 
 namespace InvestigationGame.Sensors
 {
+    /// <summary>
+    /// A class representing a thermal sensor in the Investigation Game.
+    /// </summary>
     public class SignalSensor : ISensor
     {
         public string Name { get; } = "signal";
         private bool _revealed = false;
 
+        /// <summary>
+        /// A method to check if the sensor matches a specific weakness type.
+        /// </summary>
+        /// <param name="weakness"></param>
+        /// <returns></returns>
         public bool Matches(InvestigationGame.Enums.SensorType weakness)
         {
             return weakness == InvestigationGame.Enums.SensorType.Signal;
         }
 
-        // Reveals one field of information about the agent (e.g., rank)
+        /// <summary>
+        /// A method to reveal information about the agent, according to the sensor's capabilities.
+        /// </summary>
+        /// <param name="agentInfo"></param>
+        /// <returns></returns>
         public string? RevealInfo(Dictionary<string, string> agentInfo)
         {
             if (_revealed || agentInfo == null || agentInfo.Count == 0)

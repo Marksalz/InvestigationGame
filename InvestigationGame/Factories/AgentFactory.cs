@@ -5,15 +5,14 @@ using System.Collections.Generic;
 
 namespace InvestigationGame.Factories
 {
+    /// <summary>
+    /// A factory class for creating agents of different types with specific weaknesses.
+    /// </summary>
     public class AgentFactory : IAgentFactory
     {
-        //public IAgent CreateAgent(string type, List<string> weaknesses)
-        //{
-        //    return CreateAgent(Enum.TryParse<Enums.AgentType>(type, true, out var agentType) ? agentType : throw new ArgumentException($"Unknown agent type: {type}"), weaknesses);
-        //}
-
         public IAgent CreateAgent(Enums.AgentType type, List<Enums.SensorType> weaknesses)
         {
+            // This method creates an agent based on the specified type and weaknesses.
             return type switch
             {
                 Enums.AgentType.FootSoldier => new FootSoldierAgent("Foot Soldier", weaknesses),

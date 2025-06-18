@@ -60,6 +60,14 @@ namespace InvestigationGame.Manager
                     continue;
                 }
 
+                // if the sensor is a MotionSensor or PulseSensor, activate it
+                if (sensor is ISensorBroken brokenSensor && checkSensorBroken(brokenSensor))
+                {
+                    //  If the sensor is broken, skip adding it
+                    Console.WriteLine($"The {sensor.Name} sensor is broken and cannot be attached.");
+                    continue;
+                }
+
                 _attachedSensors.Add(sensor);
                 ActivateRevel(sensor);
 
@@ -71,6 +79,29 @@ namespace InvestigationGame.Manager
                 int match = _agent.EvaluateSensors(_attachedSensors);
                 int total = _agent.SensorSlots;
 
+                //// Check for broken sensors and remove them
+                //var brokenSensors = new List<ISensor>();
+                //foreach (var sensor1 in _attachedSensors)
+                //{
+                //    // Only check for sensors that can break
+                //    if ((sensor1 is MotionSensor motion && motion.IsBroken) ||
+                //        (sensor1 is PulseSensor pulse && pulse.IsBroken))
+                //    {
+                //        Console.WriteLine($"The {sensor1.Name} sensor is broken and has been removed.");
+                //        brokenSensors.Add(sensor1);
+                //    }
+                //}
+                //foreach (var broken in brokenSensors)
+                //{
+                //    _attachedSensors.Remove(broken);
+                //}
+
+                // Display the current state of attached sensors
+                Console.WriteLine("\nCurrent attached sensors:");
+                foreach (var attachedSensor in _attachedSensors)
+                {
+                    Console.WriteLine($"- {attachedSensor.Name}");
+                }
                 Console.WriteLine($"Match result: {match}/{total}");
                 Console.WriteLine();
 
@@ -81,16 +112,28 @@ namespace InvestigationGame.Manager
                     Console.WriteLine("Agent exposed!");
                     Console.WriteLine("******************");
                     Console.WriteLine();
+
+                    // reset all of sensors that can break
+                    foreach (var attachedSensor in _attachedSensors)
+                    {
+                        if (attachedSensor is ISensorBroken brokenSensor1)
+                        {
+                            brokenSensor1.ResetActivation();
+                        }
+                    }
                     isRunning = false;
                 }
             }
         }
 
-
+        public bool checkSensorBroken(ISensorBroken sensor)
+        {
+           sensor.Activate();
+           return sensor.IsBroken;
+        }
 
         public void ActivateRevel(ISensor sensor)
         {
-            // Prepare agent info for reveal abilities
             var agentInfo = new Dictionary<string, string>
             {
                 { "Name", _agent.Name },
@@ -98,19 +141,9 @@ namespace InvestigationGame.Manager
                 { "SensorSlots", _agent.SensorSlots.ToString() }
             };
 
-            // Handle special reveal abilities
             switch (sensor)
             {
-                case ThermalSensor thermalSensor:
-                    //// Convert string weaknesses to SensorType enum list
-                    //var weaknessTypes = new List<Enums.SensorType>();
-                    //foreach (var w in _agent.SecretWeaknesses)
-                    //{
-                    //    if (Enum.TryParse<Enums.SensorType>(w, true, out var type))
-                    //    {
-                    //        weaknessTypes.Add(type);
-                    //    }
-                    //}
+                case ThermalSensor thermalSensor:               
                     var revealedWeakness = thermalSensor.RevealWeakness(_agent.SecretWeaknesses);
                     if (revealedWeakness != null)
                     {

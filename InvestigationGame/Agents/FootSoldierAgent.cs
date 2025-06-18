@@ -22,11 +22,11 @@ namespace InvestigationGame.Agents
             int matchCount = 0;
             foreach (var sensor in sensors)
             {
-                var match = tempWeaknesses.FirstOrDefault(w => sensor.Matches(w));
-                if (match != 0)
+                int idx = tempWeaknesses.FindIndex(w => sensor.Matches(w));
+                if (idx != -1)
                 {
                     matchCount++;
-                    tempWeaknesses.Remove(match);
+                    tempWeaknesses.RemoveAt(idx);
                 }
             }
             return matchCount;

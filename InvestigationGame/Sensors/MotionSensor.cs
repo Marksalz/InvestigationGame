@@ -3,18 +3,42 @@ using System;
 
 namespace InvestigationGame.Sensors
 {
-    public class MotionSensor : ISensor
+    public class MotionSensor : ISensor, ISensorBroken
     {
         public string Name { get; } = "motion";
-        private int _activations = 0;
+        private static int _activations = 0;
         private const int MaxActivations = 3;
-        public bool IsBroken => _activations >= MaxActivations;
+        public bool IsBroken { get; set; } = false; 
 
-        public bool Matches(InvestigationGame.Enums.SensorType weakness)
+        public bool Matches(Enums.SensorType weakness)
         {
             if (IsBroken) return false;
+            //_activations++;
+            return weakness == Enums.SensorType.Motion;
+        }
+
+        public void Activate()
+        {
+            if (IsBroken)
+            {
+                Console.WriteLine($"Activated: {_activations} times.");
+                return;
+            }
             _activations++;
-            return weakness == InvestigationGame.Enums.SensorType.Motion;
+            if (_activations >= MaxActivations)
+            {
+                IsBroken = true;
+                Console.WriteLine($"Activated: {_activations} times.");
+            }
+            else
+            {
+                Console.WriteLine($"Activated: {_activations} times.");
+            }
+        }
+
+        public void ResetActivation()
+        {
+            _activations = 0;
         }
     }
 }
